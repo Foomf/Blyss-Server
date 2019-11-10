@@ -52,4 +52,6 @@ target_include_directories(${PROG_NAME} PUBLIC
 # Library linking                                           #
 # --------------------------------------------------------- #
 target_link_libraries(${PROG_NAME}
+    ${SPDLOG_LIB}
+    ${LIBUV_LIB}
 )
