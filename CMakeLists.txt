@@ -21,6 +21,8 @@ include(cmake/add.cmake)
 # --------------------------------------------------------- #
 # Include dependencies                                      #
 # --------------------------------------------------------- #
+include(cmake/lib/spdlog.cmake)
+include(cmake/lib/libuv.cmake)
 
 # --------------------------------------------------------- #
 # Include sources                                           #
