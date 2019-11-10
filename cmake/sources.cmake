@@ -6,6 +6,7 @@ set(BLYSS_HDRS )
 # --------------------------------------------------------- #
 ADD_SRC_ROOT(main)
 ADD_CLASS_ROOT(server)
+ADD_CLASS_ROOT(perf_watcher)
 
 # --------------------------------------------------------- #
 # Text files                                                #
