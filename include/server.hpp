@@ -10,7 +10,7 @@ namespace blyss::server
 {
     class server
     {
-        uv_loop_t loop_;
+        uv_loop_t* loop_;
         uv_timer_t frame_timer_{};
 
         std::int64_t counter_ = 0;
@@ -18,7 +18,7 @@ namespace blyss::server
         perf_watcher perf_watcher_;
 
     public:
-        server();
+        server(uv_loop_t* loop);
         ~server();
 
         void frame();

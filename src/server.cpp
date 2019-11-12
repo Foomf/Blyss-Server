@@ -9,22 +9,19 @@ namespace blyss::server
 
     void timer_callback(uv_timer_t*);
 
-    server::server()
-        : loop_{}
-        , perf_watcher_{ms_per_frame, 5000}
+    server::server(uv_loop_t* loop)
+        : loop_{loop}
+        , perf_watcher_{loop, ms_per_frame, 5000}
     {
         spdlog::info("Server pushed to memory stack.");
-        uv_loop_init(&loop_);
-        loop_.data = this;
+        loop_->data = this;
 
-        perf_watcher_.init(&loop_);
-
-        uv_timer_init(&loop_, &frame_timer_);
+        uv_timer_init(loop_, &frame_timer_);
     }
 
     server::~server()
     {
-        uv_loop_close(&loop_);
+        uv_loop_close(loop_);
         spdlog::info("Server removed from memory.");
     }
 
@@ -34,7 +31,7 @@ namespace blyss::server
         perf_watcher_.start();
 
         spdlog::info("Main loop started!");
-        uv_run(&loop_, UV_RUN_DEFAULT);
+        uv_run(loop_, UV_RUN_DEFAULT);
         spdlog::info("Main loop stopped!");
     }
 

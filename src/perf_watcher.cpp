@@ -12,51 +12,28 @@ namespace blyss::server
         self->reset();
     }
 
-    perf_watcher::perf_watcher(std::uint64_t ms_per_frame, std::uint64_t slow_warning_reset_ms)
+    perf_watcher::perf_watcher(uv_loop_t* loop, std::uint64_t ms_per_frame, std::uint64_t slow_warning_reset_ms)
         : ms_per_frame_{ ms_per_frame }
         , slow_warning_reset_ms_{ slow_warning_reset_ms }
+        , loop_{loop}
+        , previous_time_{uv_now(loop_)}
     {
-    }
-
-    void perf_watcher::init(uv_loop_t* loop)
-    {
-        loop_ = loop;
-        previous_time_ = uv_now(loop_);
         uv_timer_init(loop_, &show_warning_timer_);
-        is_init_ = true;
     }
 
     perf_watcher::~perf_watcher()
     {
-        if (!is_init_)
-        {
-            spdlog::warn("perf_watcher not initialized yet!");
-            return;
-        }
-
         uv_timer_stop(&show_warning_timer_);
     }
 
     void perf_watcher::start()
     {
-        if (!is_init_)
-        {
-            spdlog::warn("perf_watcher not initialized yet!");
-            return;
-        }
-
         show_warning_timer_.data = this;
         reset();
     }
 
     void perf_watcher::update()
     {
-        if (!is_init_)
-        {
-            spdlog::warn("perf_watcher not initialized yet!");
-            return;
-        }
-
         const auto current_time = uv_now(loop_);
         const auto diff = current_time - previous_time_;
         previous_time_ = current_time;

@@ -12,7 +12,7 @@ int main()
 {
     try
     {
-        server s;
+        server s(uv_default_loop());
         s.run_forever();
         return EXIT_SUCCESS;
     }
