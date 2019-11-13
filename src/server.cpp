@@ -6,12 +6,13 @@
 namespace blyss::server
 {
     const std::uint64_t ms_per_frame = 50;
+    const std::uint64_t slow_warning_reset_ms = 5000;
 
     void timer_callback(uv_timer_t*);
 
     server::server(uv_loop_t* loop)
         : loop_{loop}
-        , perf_watcher_{loop, ms_per_frame, 5000}
+        , perf_watcher_{loop, ms_per_frame, slow_warning_reset_ms }
     {
         spdlog::info("Server pushed to memory stack.");
         loop_->data = this;
