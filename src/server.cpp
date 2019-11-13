@@ -28,7 +28,6 @@ namespace blyss::server
 
     server::~server()
     {
-        uv_checked(uv_loop_close(loop_));
         spdlog::info("Server removed from memory.");
     }
 
