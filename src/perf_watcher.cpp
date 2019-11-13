@@ -2,6 +2,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include "uv_utils.hpp"
+
 namespace blyss::server
 {
     const uint64_t frame_leeway = 10;
@@ -18,12 +20,12 @@ namespace blyss::server
         , loop_{loop}
         , previous_time_{uv_now(loop_)}
     {
-        uv_timer_init(loop_, &show_warning_timer_);
+        uv_checked(uv_timer_init(loop_, &show_warning_timer_));
     }
 
     perf_watcher::~perf_watcher()
     {
-        uv_timer_stop(&show_warning_timer_);
+        uv_warned(uv_timer_stop(&show_warning_timer_));
     }
 
     void perf_watcher::start()
@@ -53,7 +55,7 @@ namespace blyss::server
     {
         spdlog::warn("Server is running {0:d} ms behind! Consider getting a faster cpu...", missed_ms);
         show_slow_warning_ = false;
-        uv_timer_start(&show_warning_timer_, perf_watcher_timer_callback, slow_warning_reset_ms_, 0);
+        uv_checked(uv_timer_start(&show_warning_timer_, perf_watcher_timer_callback, slow_warning_reset_ms_, 0));
     }
 
 }

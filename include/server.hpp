@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <stdexcept>
 
 #include <uv.h>
 
@@ -12,6 +13,7 @@ namespace blyss::server
     {
         uv_loop_t* loop_;
         uv_timer_t frame_timer_{};
+        uv_tcp_t server_{};
 
         std::int64_t counter_ = 0;
 

@@ -3,6 +3,8 @@
 #include <cstdint>
 #include "spdlog/spdlog.h"
 
+#include "uv_utils.hpp"
+
 namespace blyss::server
 {
     const std::uint64_t ms_per_frame = 50;
@@ -17,28 +19,32 @@ namespace blyss::server
         spdlog::info("Server pushed to memory stack.");
         loop_->data = this;
 
-        uv_timer_init(loop_, &frame_timer_);
+        ////uv_tcp_init(loop, &server_);
+        ////sockaddr_in address{};
+        ////uv_checked(uv_ip4_addr("0.0.0.0", 3786, &address));
+
+        uv_checked(uv_timer_init(loop_, &frame_timer_));
     }
 
     server::~server()
     {
-        uv_loop_close(loop_);
+        uv_checked(uv_loop_close(loop_));
         spdlog::info("Server removed from memory.");
     }
 
     void server::run_forever()
     {
-        uv_timer_start(&frame_timer_, timer_callback, 0, ms_per_frame + 50);
+        uv_checked(uv_timer_start(&frame_timer_, timer_callback, 0, ms_per_frame + 50));
         perf_watcher_.start();
 
         spdlog::info("Main loop started!");
-        uv_run(loop_, UV_RUN_DEFAULT);
+        uv_checked(uv_run(loop_, UV_RUN_DEFAULT));
         spdlog::info("Main loop stopped!");
     }
 
     void server::stop()
     {
-        uv_timer_stop(&frame_timer_);
+        uv_checked(uv_timer_stop(&frame_timer_));
     }
 
     void server::frame()
