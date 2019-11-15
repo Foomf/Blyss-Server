@@ -23,6 +23,7 @@ include(cmake/add.cmake)
 # --------------------------------------------------------- #
 include(cmake/lib/spdlog.cmake)
 include(cmake/lib/libuv.cmake)
+include(cmake/lib/libprotobuf.cmake)
 
 # --------------------------------------------------------- #
 # Include sources                                           #
@@ -39,14 +40,16 @@ add_compile_definitions(BLYSS_VERSION_PATCH="1")
 # --------------------------------------------------------- #
 # Blyss executable                                          #
 # --------------------------------------------------------- #
-add_executable(${PROG_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS})
+add_executable(${PROG_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS} protocol.pb.cc protocol.pb.h)
 
 # --------------------------------------------------------- #
 # Include directories                                       #
 # --------------------------------------------------------- #
 target_include_directories(${PROG_NAME} PUBLIC
     ${BLYSS_INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
 
 # --------------------------------------------------------- #
 # Library linking                                           #
@@ -54,4 +57,5 @@ target_include_directories(${PROG_NAME} PUBLIC
 target_link_libraries(${PROG_NAME}
     ${SPDLOG_LIB}
     ${LIBUV_LIB}
+    ${LIBPROTOBUF_LIB}
 )
