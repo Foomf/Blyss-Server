@@ -14,9 +14,6 @@ namespace blyss::server
 
     void timer_callback(uv_timer_t*);
     void on_new_connection(uv_stream_t* server_handle, int status);
-    void alloc_callback(uv_handle_t* client, size_t suggested_size, uv_buf_t* buf);
-    void read_callback(uv_stream_t* client_handle, ssize_t nread, const uv_buf_t* buf);
-    void close_cb(uv_handle_t* client);
 
     server::server(uv_loop_t* loop)
         : loop_{ loop }
