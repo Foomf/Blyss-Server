@@ -16,9 +16,9 @@ namespace blyss::server
         client(uv_stream_t* server, std::int32_t client_id);
         virtual ~client();
 
-        bool is_closed() const;
+        [[nodiscard]] bool is_closed() const;
         void set_closed(bool closed);
         void close();
-        std::int32_t client_id() const;
+        [[nodiscard]] std::int32_t client_id() const;
     };
 }
