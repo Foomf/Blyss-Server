@@ -9,6 +9,7 @@ ADD_CLASS_ROOT(server)
 ADD_CLASS_ROOT(perf_watcher)
 ADD_HDR_ROOT(uv_exception)
 ADD_HDR_ROOT(uv_utils)
+ADD_CLASS_ROOT(client)
 
 # --------------------------------------------------------- #
 # Text files                                                #

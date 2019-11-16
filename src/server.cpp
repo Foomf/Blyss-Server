@@ -13,9 +13,9 @@ namespace blyss::server
     const std::uint64_t slow_warning_reset_ms = 5000;
 
     void timer_callback(uv_timer_t*);
-    void on_new_connection(uv_stream_t* server, int status);
+    void on_new_connection(uv_stream_t* server_handle, int status);
     void alloc_callback(uv_handle_t* client, size_t suggested_size, uv_buf_t* buf);
-    void read_callback(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf);
+    void read_callback(uv_stream_t* client_handle, ssize_t nread, const uv_buf_t* buf);
     void close_cb(uv_handle_t* client);
 
     server::server(uv_loop_t* loop)
@@ -57,6 +57,24 @@ namespace blyss::server
     void server::frame()
     {
         perf_watcher_.update();
+        cleanup_closed_clients();
+    }
+
+    void server::add_client(std::unique_ptr<client> c)
+    {
+        clients_.push_back(std::move(c));
+    }
+
+    std::int32_t server::gen_client_id()
+    {
+        return next_client_id_++;
+    }
+
+    void server::cleanup_closed_clients()
+    {
+        clients_.erase(
+            std::remove_if(clients_.begin(), clients_.end(), [](const std::unique_ptr<client>& c) { return c->is_closed(); }), 
+            clients_.end());
     }
 
     void timer_callback(uv_timer_t* handle)
@@ -65,7 +83,7 @@ namespace blyss::server
         self->frame();
     }
 
-    void on_new_connection(uv_stream_t* server, int status)
+    void on_new_connection(uv_stream_t* server_handle, int status)
     {
         spdlog::info("New connection!");
         if (status < 0)
@@ -74,61 +92,17 @@ namespace blyss::server
             return;
         }
 
-        auto client = new uv_tcp_t;
+        auto s = static_cast<server*>(server_handle->loop->data);
+        auto id = s->gen_client_id();
+
         try
         {
-            uv_checked(uv_tcp_init(server->loop, client));
-            uv_checked(uv_accept(server, reinterpret_cast<uv_stream_t*>(client)));
-            uv_checked(uv_read_start(reinterpret_cast<uv_stream_t*>(client), alloc_callback, read_callback));
-            spdlog::info("New connection ready!");
+            s->add_client(std::make_unique<client>(server_handle, id));
         }
-        catch (const uv_exception& e)
+        catch (const uv_exception & e)
         {
             spdlog::error("Client connection error! {0}", e.what());
-            delete client;
         }
-
-    }
-
-    void alloc_callback(uv_handle_t* client, size_t suggested_size, uv_buf_t* buf)
-    {
-        buf->base = static_cast<char*>(std::malloc(suggested_size));
-        spdlog::info("Allocated {0} bytes", suggested_size);
-        buf->len = suggested_size;
-    }
-
-    void read_callback(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
-    {
-        spdlog::info("Read callback!");
-        try
-        {
-            if (nread < 0)
-            {
-                uv_checked(nread);
-            }
-
-            spdlog::info("{0} bytes read.", nread);
-
-            Foo f;
-            f.ParseFromArray(buf->base, nread);
-            spdlog::info("Message: {0}", f.msg());
-
-        }
-        catch (const uv_exception& e)
-        {
-            spdlog::error("Read error! {0}", e.what());
-            uv_checked(uv_read_stop(client));
-            uv_close(reinterpret_cast<uv_handle_t*>(client), close_cb);
-        }
-
-        std::free(buf->base);
-        spdlog::info("Freed {0} bytes", buf->len);
-    }
-
-    void close_cb(uv_handle_t* client)
-    {
-        spdlog::info("Close callback!");
-        delete client;
     }
 
 }
