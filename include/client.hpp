@@ -19,5 +19,6 @@ namespace blyss::server
         bool is_closed() const;
         void set_closed(bool closed);
         void close();
+        std::int32_t client_id() const;
     };
 }

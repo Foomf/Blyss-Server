@@ -54,7 +54,6 @@ namespace blyss::server
     void server::frame()
     {
         perf_watcher_.update();
-        cleanup_closed_clients();
     }
 
     void server::add_client(std::unique_ptr<client> c)
@@ -67,10 +66,10 @@ namespace blyss::server
         return next_client_id_++;
     }
 
-    void server::cleanup_closed_clients()
+    void server::remove_client(std::int32_t client_id)
     {
         clients_.erase(
-            std::remove_if(clients_.begin(), clients_.end(), [](const std::unique_ptr<client>& c) { return c->is_closed(); }), 
+            std::remove_if(clients_.begin(), clients_.end(), [=](const std::unique_ptr<client>& c) { return c->client_id() == client_id; }),
             clients_.end());
     }
 

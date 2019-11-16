@@ -39,9 +39,8 @@ namespace blyss::server
         void stop();
 
         void add_client(std::unique_ptr<client> c);
+        void remove_client(std::int32_t client_id);
 
         std::int32_t gen_client_id();
-
-        void cleanup_closed_clients();
     };
 }

@@ -2,6 +2,7 @@
 
 #include "uv_utils.hpp"
 #include "protocol.pb.h"
+#include "server.hpp"
 
 namespace blyss::server
 {
@@ -41,6 +42,11 @@ namespace blyss::server
         {
             uv_close(handle, close_cb);
         }
+    }
+
+    std::int32_t client::client_id() const
+    {
+        return client_id_;
     }
 
     void alloc_callback(uv_handle_t* client, size_t suggested_size, uv_buf_t* buf)
@@ -89,7 +95,9 @@ namespace blyss::server
     {
         spdlog::info("Close callback!");
         auto c = static_cast<client*>(client_handle->data);
+        auto s = static_cast<server*>(client_handle->loop->data);
         c->set_closed(true);
+        s->remove_client(c->client_id());
     }
 
 }
