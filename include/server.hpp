@@ -29,7 +29,7 @@ namespace blyss::server
         std::vector<std::unique_ptr<client>> clients_;
 
     public:
-        server(uv_loop_t* loop);
+        explicit server(uv_loop_t* loop);
         ~server();
 
         void frame();
