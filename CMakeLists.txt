@@ -78,12 +78,11 @@ if(${BLYSS_TEST_SERVER})
     set(gtest_force_shared_crt ON)
     enable_testing()
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/googletest)
-    # find_package(GTest REQUIRED)
 
     set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 
     set(TEST_SRCS 
-        ${TEST_DIR}/tests.cpp
+        ${TEST_DIR}/packet_buffer_tests.cpp
     )
 
     include(GoogleTest)

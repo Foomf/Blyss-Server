@@ -10,4 +10,14 @@ namespace blyss::server
     {
         std::memcpy(buffer_.data(), data, length);
     }
+
+    const std::uint8_t* packet_buffer::get_data() const
+    {
+        return buffer_.data();
+    }
+
+    std::uint32_t packet_buffer::get_length() const
+    {
+        return length_;
+    }
 }
