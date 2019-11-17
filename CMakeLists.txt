@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.12)
 # Project declaration                                       #
 # --------------------------------------------------------- #
 set(PROG_NAME Blyss-Server)
+set(LIB_NAME Lib${PROG_NAME})
 project (${PROG_NAME})
 
 # --------------------------------------------------------- #
@@ -38,24 +39,53 @@ add_compile_definitions(BLYSS_VERSION_MINOR="0")
 add_compile_definitions(BLYSS_VERSION_PATCH="1")
 
 # --------------------------------------------------------- #
-# Blyss executable                                          #
+# Blyss library                                             #
 # --------------------------------------------------------- #
-add_executable(${PROG_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS} protocol.pb.cc protocol.pb.h)
+add_library(${LIB_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS} protocol.pb.cc protocol.pb.h)
 
 # --------------------------------------------------------- #
 # Include directories                                       #
 # --------------------------------------------------------- #
-target_include_directories(${PROG_NAME} PUBLIC
+target_include_directories(${LIB_NAME} PUBLIC
     ${BLYSS_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-
 # --------------------------------------------------------- #
 # Library linking                                           #
 # --------------------------------------------------------- #
-target_link_libraries(${PROG_NAME}
+target_link_libraries(${LIB_NAME}
     ${SPDLOG_LIB}
     ${LIBUV_LIB}
     ${LIBPROTOBUF_LIB}
 )
+
+# --------------------------------------------------------- #
+# Executable linking                                        #
+# --------------------------------------------------------- #
+set(BLYSS_SERVER_EXECUTABLE ON CACHE BOOL "Build Executable")
+if(${BLYSS_SERVER_EXECUTABLE})
+    add_executable(${PROG_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+    target_link_libraries(${PROG_NAME} ${LIB_NAME})
+endif(${BLYSS_SERVER_EXECUTABLE})
+
+# --------------------------------------------------------- #
+# Testing                                                   #
+# --------------------------------------------------------- #
+set(TEST_BLYSS_SERVER OFF CACHE BOOL "Run Tests")
+if(${TEST_BLYSS_SERVER})
+    enable_testing()
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/googletest)
+    # find_package(GTest REQUIRED)
+
+    set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
+
+    set(TEST_SRCS 
+        ${TEST_DIR}/tests.cpp
+    )
+
+    include(GoogleTest)
+    add_executable(MainTest ${TEST_SRCS})
+    target_link_libraries(MainTest GTest::GTest GTest::Main ${LIB_NAME})
+    gtest_discover_tests(MainTest)
+endif(${TEST_BLYSS_SERVER})

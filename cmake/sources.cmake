@@ -4,7 +4,6 @@ set(BLYSS_HDRS )
 # --------------------------------------------------------- #
 # main.cpp                                                  #
 # --------------------------------------------------------- #
-ADD_SRC_ROOT(main)
 ADD_CLASS_ROOT(server)
 ADD_CLASS_ROOT(perf_watcher)
 ADD_HDR_ROOT(uv_exception)
