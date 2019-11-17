@@ -72,8 +72,10 @@ endif(${BLYSS_SERVER_EXECUTABLE})
 # --------------------------------------------------------- #
 # Testing                                                   #
 # --------------------------------------------------------- #
-set(TEST_BLYSS_SERVER OFF CACHE BOOL "Run Tests")
-if(${TEST_BLYSS_SERVER})
+set(BLYSS_TEST_SERVER OFF CACHE BOOL "Run Tests")
+if(${BLYSS_TEST_SERVER})
+    set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
     enable_testing()
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/googletest)
     # find_package(GTest REQUIRED)
@@ -86,6 +88,6 @@ if(${TEST_BLYSS_SERVER})
 
     include(GoogleTest)
     add_executable(MainTest ${TEST_SRCS})
-    target_link_libraries(MainTest GTest::GTest GTest::Main ${LIB_NAME})
+    target_link_libraries(MainTest gtest gtest_main ${LIB_NAME})
     gtest_discover_tests(MainTest)
-endif(${TEST_BLYSS_SERVER})
+endif(${BLYSS_TEST_SERVER})
