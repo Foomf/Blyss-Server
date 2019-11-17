@@ -3,8 +3,6 @@
 #include <cstdint>
 #include "spdlog/spdlog.h"
 
-#include "protocol.pb.h"
-
 #include "uv_utils.hpp"
 
 namespace blyss::server

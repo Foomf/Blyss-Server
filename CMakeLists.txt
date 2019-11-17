@@ -24,7 +24,7 @@ include(cmake/add.cmake)
 # --------------------------------------------------------- #
 include(cmake/lib/spdlog.cmake)
 include(cmake/lib/libuv.cmake)
-include(cmake/lib/libprotobuf.cmake)
+#include(cmake/lib/libprotobuf.cmake)
 
 # --------------------------------------------------------- #
 # Include sources                                           #
@@ -41,7 +41,7 @@ add_compile_definitions(BLYSS_VERSION_PATCH="1")
 # --------------------------------------------------------- #
 # Blyss library                                             #
 # --------------------------------------------------------- #
-add_library(${LIB_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS} protocol.pb.cc protocol.pb.h)
+add_library(${LIB_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS})
 
 # --------------------------------------------------------- #
 # Include directories                                       #
@@ -57,7 +57,6 @@ target_include_directories(${LIB_NAME} PUBLIC
 target_link_libraries(${LIB_NAME}
     ${SPDLOG_LIB}
     ${LIBUV_LIB}
-    ${LIBPROTOBUF_LIB}
 )
 
 # --------------------------------------------------------- #
@@ -76,6 +75,7 @@ set(BLYSS_TEST_SERVER OFF CACHE BOOL "Run Tests")
 if(${BLYSS_TEST_SERVER})
     set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
     set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+    set(gtest_force_shared_crt ON)
     enable_testing()
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/googletest)
     # find_package(GTest REQUIRED)
