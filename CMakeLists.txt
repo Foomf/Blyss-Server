@@ -83,6 +83,7 @@ if(${BLYSS_TEST_SERVER})
 
     set(TEST_SRCS 
         ${TEST_DIR}/packet_buffer_tests.cpp
+        ${TEST_DIR}/packet_reader_tests.cpp
     )
 
     include(GoogleTest)

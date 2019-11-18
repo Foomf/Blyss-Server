@@ -8,15 +8,12 @@
 
 #include <uv.h>
 
-#include "server.hpp"
 #include "packet_buffer.hpp"
 
 namespace blyss::server
 {
     class packet_reader
     {
-        server* server_;
-
         std::array<std::uint8_t, 5000> buffer_{};
         std::uint32_t buffer_pos_ = 0;
         std::queue<std::unique_ptr<packet_buffer>> packets_{};

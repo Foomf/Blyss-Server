@@ -27,7 +27,7 @@ namespace blyss::server
     TEST(packet_buffer_tests, ctor_data_shouldSetData)
     {
         std::uint8_t data[] = { 1,2,3,4,5 };
-        const packet_buffer b(sizeof(data), reinterpret_cast<std::uint8_t*>(&data));
+        const packet_buffer b(sizeof(data), data);
         ASSERT_EQ(5, b.get_length());
 
         for (auto ii = 0; ii < 5; ++ii)
@@ -39,7 +39,7 @@ namespace blyss::server
     TEST(packet_buffer_tests, ctor_data_shouldBeCopied)
     {
         std::uint8_t data[] = { 1,2,3,4,5 };
-        const packet_buffer b(sizeof(data), reinterpret_cast<std::uint8_t*>(&data));
+        const packet_buffer b(sizeof(data), data);
         ASSERT_NE(data, b.get_data());
     }
 }
