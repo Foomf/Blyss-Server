@@ -7,6 +7,8 @@
 
 namespace blyss::server
 {
+    const int length_size = 4;
+
     void packet_reader::read(std::uint8_t* data, const ssize_t nread)
     {
         if (!data)
@@ -38,16 +40,16 @@ namespace blyss::server
 
                 if (is_complete())
                 {
-                    auto packet = std::make_unique<packet_buffer>(length, buffer_.data() + 4);
+                    auto packet = std::make_unique<packet_buffer>(length, buffer_.data() + length_size);
                     packets_.push(std::move(packet));
                     buffer_pos_ = 0;
                 }
             }
             else
             {
-                std::memcpy(dest, src, 4);
-                buffer_pos_ += 4;
-                data_pos += 4;
+                std::memcpy(dest, src, length_size);
+                buffer_pos_ += length_size;
+                data_pos += length_size;
             }
         }
     }
@@ -75,12 +77,12 @@ namespace blyss::server
 
     bool packet_reader::is_complete() const
     {
-        return packet_length() == buffer_pos_ - 4;
+        return packet_length() == buffer_pos_ - length_size;
     }
 
     bool packet_reader::has_length_read() const
     {
-        return buffer_pos_ >= 4;
+        return buffer_pos_ >= length_size;
     }
 
 }
