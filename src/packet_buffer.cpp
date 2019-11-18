@@ -5,7 +5,7 @@
 
 namespace blyss::server
 {
-    packet_buffer::packet_buffer(const std::int32_t length, std::uint8_t* data)
+    packet_buffer::packet_buffer(const std::int16_t length, std::uint8_t* data)
         : length_{length}
         , buffer_{nullptr}
     {
@@ -34,7 +34,7 @@ namespace blyss::server
         return buffer_;
     }
 
-    std::uint32_t packet_buffer::get_length() const
+    std::int16_t packet_buffer::get_length() const
     {
         return length_;
     }

@@ -135,6 +135,13 @@ namespace blyss::server
         }
     }
 
+    TEST(packet_reader_tests, read_packetLengthTooLong_shouldThrow)
+    {
+        packet_reader r;
+        std::uint8_t data[] = { 0xf, 0xFA, 0xF3, 0x60 };
+        ASSERT_THROW(r.read(data, sizeof(data)), std::overflow_error);
+    }
+
     TEST(packet_reader_tests, pop_emptyPackets_shouldReturnEmpty)
     {
         packet_reader r;

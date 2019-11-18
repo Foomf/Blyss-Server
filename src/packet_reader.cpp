@@ -69,9 +69,16 @@ namespace blyss::server
 
     std::uint32_t packet_reader::packet_length() const
     {
-        return std::uint16_t(
+        const auto length = std::uint16_t(
             static_cast<unsigned char>(buffer_[1]) << 8 |
             static_cast<unsigned char>(buffer_[0]));
+
+        if (length > max_packet_length)
+        {
+            throw std::overflow_error("Packet read that's longer than the max length!");
+        }
+
+        return length;
     }
 
     bool packet_reader::is_complete() const

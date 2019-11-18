@@ -10,7 +10,7 @@ namespace blyss::server
         std::uint8_t* buffer_;
 
     public:
-        packet_buffer(std::int32_t length, std::uint8_t* data);
+        packet_buffer(std::int16_t length, std::uint8_t* data);
         ~packet_buffer();
 
         packet_buffer(const packet_buffer&) = delete;
@@ -19,6 +19,6 @@ namespace blyss::server
         packet_buffer& operator=(packet_buffer&&) = delete;
 
         [[nodiscard]] const std::uint8_t* get_data() const;
-        [[nodiscard]] std::uint32_t get_length() const;
+        [[nodiscard]] std::int16_t get_length() const;
     };
 }
