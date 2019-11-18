@@ -69,6 +69,11 @@ namespace blyss::server
 
     std::uint32_t packet_reader::packet_length() const
     {
+        if (buffer_pos_ < 2)
+        {
+            throw std::logic_error("Not enough data read in buffer to read length field!");
+        }
+
         const auto length = std::uint16_t(
             static_cast<unsigned char>(buffer_[1]) << 8 |
             static_cast<unsigned char>(buffer_[0]));
