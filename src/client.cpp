@@ -84,7 +84,7 @@ namespace blyss::server
         }
         catch (const std::exception& e)
         {
-            spdlog::error("Read error for client {0}! {0}", c->client_id(), e.what());
+            spdlog::error("Read error for client {0}! {1}", c->client_id(), e.what());
             c->close();
         }
 
