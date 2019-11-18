@@ -47,9 +47,10 @@ namespace blyss::server
             }
             else
             {
-                std::memcpy(dest, src, length_size);
-                buffer_pos_ += length_size;
-                data_pos += length_size;
+                const auto bytes_to_read = min(length_size, nread - data_pos);
+                std::memcpy(dest, src, bytes_to_read);
+                buffer_pos_ += bytes_to_read;
+                data_pos += bytes_to_read;
             }
         }
     }
