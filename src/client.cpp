@@ -1,7 +1,6 @@
 #include "client.hpp"
 
 #include "uv_utils.hpp"
-#include "protocol.pb.h"
 #include "server.hpp"
 
 namespace blyss::server
@@ -49,6 +48,12 @@ namespace blyss::server
         return client_id_;
     }
 
+    void client::read(std::uint8_t* data, ssize_t nread)
+    {
+        reader_.read(data, nread);
+    }
+
+
     void alloc_callback(uv_handle_t* client, size_t suggested_size, uv_buf_t* buf)
     {
         buf->base = static_cast<char*>(std::malloc(suggested_size));
@@ -67,7 +72,6 @@ namespace blyss::server
             {
                 spdlog::info("Done reading from client_handle!");
                 c->close();
-                return;
             }
 
             if (nread < 0)
@@ -76,15 +80,12 @@ namespace blyss::server
             }
 
             spdlog::info("{0} bytes read.", nread);
-            Foo f;
-            f.ParseFromArray(buf->base, nread);
-            spdlog::info("Message: {0}", f.msg());
+            c->read(reinterpret_cast<std::uint8_t*>(buf->base), nread);
         }
-        catch (const uv_exception & e)
+        catch (const std::exception& e)
         {
-            spdlog::error("Read error! {0}", e.what());
-            uv_checked(uv_read_stop(client_handle));
-            uv_close(reinterpret_cast<uv_handle_t*>(client_handle), close_cb);
+            spdlog::error("Read error for client {0}! {0}", c->client_id(), e.what());
+            c->close();
         }
 
         std::free(buf->base);
