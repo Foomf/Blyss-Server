@@ -108,6 +108,33 @@ namespace blyss::server
         }
     }
 
+    TEST(packet_reader_tests, read_multiData_shouldHaveValues)
+    {
+        packet_reader r;
+        std::uint8_t data[] = { 5, 0, 0, 0, 1, 2, 3, 4, 5, 3, 0, 0, 0, 1, 2, 3 };
+        r.read(data, sizeof(data));
+
+        auto p_opt = r.pop();
+        ASSERT_TRUE(p_opt.has_value());
+        auto p = p_opt->get();
+        ASSERT_EQ(5, p->get_length());
+
+        for (auto ii = 0; ii < 5; ++ii)
+        {
+            EXPECT_EQ(ii + 1, p->get_data()[ii]);
+        }
+
+        p_opt = r.pop();
+        ASSERT_TRUE(p_opt.has_value());
+        p = p_opt->get();
+        ASSERT_EQ(3, p->get_length());
+
+        for (auto ii = 0; ii < 3; ++ii)
+        {
+            EXPECT_EQ(ii + 1, p->get_data()[ii]);
+        }
+    }
+
     TEST(packet_reader_tests, pop_emptyPackets_shouldReturnEmpty)
     {
         packet_reader r;
