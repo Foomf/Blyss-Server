@@ -7,7 +7,7 @@
 
 namespace blyss::server
 {
-    const int length_size = 4;
+    const int length_size = 2;
 
     void packet_reader::read(std::uint8_t* data, const ssize_t nread)
     {
@@ -69,9 +69,7 @@ namespace blyss::server
 
     std::uint32_t packet_reader::packet_length() const
     {
-        return std::uint32_t(
-            static_cast<unsigned char>(buffer_[3]) << 24 |
-            static_cast<unsigned char>(buffer_[2]) << 16 |
+        return std::uint16_t(
             static_cast<unsigned char>(buffer_[1]) << 8 |
             static_cast<unsigned char>(buffer_[0]));
     }
