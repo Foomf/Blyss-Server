@@ -4,6 +4,8 @@
 
 #include "server.hpp"
 
+#include "protocol.pb.h"
+
 namespace blyss::server
 {
     const std::uint8_t packet_header_length = 2;
@@ -53,7 +55,9 @@ namespace blyss::server
 
     void handle_foo(server* s, std::int32_t client_id, std::int16_t length, const std::uint8_t* data)
     {
-        
+        Foo f;
+        f.ParseFromArray(data, length);
+        spdlog::info("Message: {0}", f.msg());
     }
 
 }

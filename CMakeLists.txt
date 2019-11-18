@@ -18,6 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # --------------------------------------------------------- #
 include(cmake/embed.cmake)
 include(cmake/add.cmake)
+include(cmake/lib/libprotobuf.cmake)
 
 # --------------------------------------------------------- #
 # Include dependencies                                      #
@@ -41,7 +42,7 @@ add_compile_definitions(BLYSS_VERSION_PATCH="1")
 # --------------------------------------------------------- #
 # Blyss library                                             #
 # --------------------------------------------------------- #
-add_library(${LIB_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS})
+add_library(${LIB_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS} protocol.pb.cc protocol.pb.h)
 
 # --------------------------------------------------------- #
 # Include directories                                       #
@@ -57,6 +58,7 @@ target_include_directories(${LIB_NAME} PUBLIC
 target_link_libraries(${LIB_NAME}
     ${SPDLOG_LIB}
     ${LIBUV_LIB}
+    ${LIBPROTOBUF_LIB}
 )
 
 # --------------------------------------------------------- #

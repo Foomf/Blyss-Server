@@ -5,6 +5,8 @@
 
 #include "uv_utils.hpp"
 
+#include "packet_buffer.hpp"
+
 namespace blyss::server
 {
     const std::uint64_t ms_per_frame = 50;
@@ -16,6 +18,7 @@ namespace blyss::server
     server::server(uv_loop_t* loop)
         : loop_{ loop }
         , perf_watcher_{ loop, ms_per_frame, slow_warning_reset_ms }
+        , switch_{this}
     {
         spdlog::info("Server pushed to memory stack.");
         loop_->data = this;
@@ -75,6 +78,12 @@ namespace blyss::server
             std::remove_if(clients_.begin(), clients_.end(), [=](const std::unique_ptr<client>& c) { return c->client_id() == client_id; }),
             clients_.end());
     }
+
+    void server::read_packet(std::int32_t client_id, std::unique_ptr<packet_buffer> buff)
+    {
+        switch_.read_packet(client_id, std::move(buff));
+    }
+
 
     void timer_callback(uv_timer_t* handle)
     {

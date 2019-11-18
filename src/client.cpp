@@ -59,7 +59,7 @@ namespace blyss::server
         std::optional<std::unique_ptr<packet_buffer>> p_opt;
         while (p_opt = reader_.pop(), p_opt.has_value())
         {
-            auto p = p_opt->get();
+            server_->read_packet(client_id_, std::move(p_opt.value()));
         }
     }
 
@@ -82,14 +82,15 @@ namespace blyss::server
                 spdlog::info("Done reading from client_handle!");
                 c->close();
             }
-
-            if (nread < 0)
+            else if (nread < 0)
             {
                 uv_checked(nread);
             }
-
-            spdlog::info("{0} bytes read.", nread);
-            c->read(reinterpret_cast<std::uint8_t*>(buf->base), nread);
+            else
+            {
+                spdlog::info("{0} bytes read.", nread);
+                c->read(reinterpret_cast<std::uint8_t*>(buf->base), nread);
+            }
         }
         catch (const std::exception& e)
         {
