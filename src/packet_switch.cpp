@@ -2,15 +2,18 @@
 
 #include <spdlog/spdlog.h>
 
+#include "server.hpp"
+
 namespace blyss::server
 {
     const std::uint8_t packet_header_length = 2;
 
-    void handle_foo(std::int16_t, const std::uint8_t*);
+    void handle_foo(server*, std::int32_t, std::int16_t, const std::uint8_t*);
 
     packet_switch::packet_switch(server* server)
         : server_{ server }
     {
+        std::memset(handlers_.data(), 0, handlers_.size());
         handlers_[foo] = &handle_foo;
     }
 
@@ -38,10 +41,17 @@ namespace blyss::server
             return;
         }
 
-        handlers_[packet_id](length, buffer);
+        const auto handler = handlers_[packet_id];
+        if (!handler)
+        {
+            spdlog::error("No handler found for packet {0}!", packet_id);
+            return;
+        }
+
+        handler(server_, client_id, length, buffer);
     }
 
-    void handle_foo(std::int16_t length, const std::uint8_t* data)
+    void handle_foo(server* s, std::int32_t client_id, std::int16_t length, const std::uint8_t* data)
     {
         
     }

@@ -14,7 +14,7 @@ namespace blyss::server
     class packet_switch
     {
         server* server_;
-        std::array<void(*)(std::int16_t, const std::uint8_t*), packet_type_length> handlers_{};
+        std::array<void(*)(server*, std::int32_t, std::int16_t, const std::uint8_t*), packet_type_length> handlers_{};
 
     public:
         packet_switch(server* server);
