@@ -56,10 +56,10 @@ namespace blyss::server
 
     void client::frame()
     {
-        std::optional<std::unique_ptr<packet_buffer>> p;
-        while (p = reader_.pop(), p.has_value())
+        std::optional<std::unique_ptr<packet_buffer>> p_opt;
+        while (p_opt = reader_.pop(), p_opt.has_value())
         {
-            
+            auto p = p_opt->get();
         }
     }
 

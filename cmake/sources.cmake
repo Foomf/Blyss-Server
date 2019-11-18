@@ -11,6 +11,8 @@ ADD_HDR_ROOT(uv_utils)
 ADD_CLASS_ROOT(client)
 ADD_CLASS_ROOT(packet_reader)
 ADD_CLASS_ROOT(packet_buffer)
+ADD_CLASS_ROOT(packet_switch)
+ADD_HDR_ROOT(packet_type)
 
 # --------------------------------------------------------- #
 # Text files                                                #
