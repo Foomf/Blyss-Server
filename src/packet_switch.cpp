@@ -38,8 +38,7 @@ namespace blyss::server
             return;
         }
 
-        auto handler = handlers_[packet_id];
-        handler(length, buffer);
+        handlers_[packet_id](length, buffer);
     }
 
     void handle_foo(std::int16_t length, const std::uint8_t* data)
