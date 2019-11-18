@@ -40,14 +40,6 @@ namespace blyss::server
 
         auto handler = handlers_[packet_id];
         handler(length, buffer);
-
-        switch(packet_id)
-        {
-
-        default:
-            spdlog::warn("Read unknown packet of id {0} from client {1}", packet_id, client_id);
-            break;
-        }
     }
 
     void handle_foo(std::int16_t length, const std::uint8_t* data)
