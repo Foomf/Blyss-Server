@@ -8,15 +8,17 @@
 
 namespace blyss::server
 {
+    class server;
     class client
     {
         std::int32_t client_id_;
+        server* server_;
+
         uv_tcp_t handle_{};
         bool closed_ = false;
         packet_reader reader_{};
-
     public:
-        client(uv_stream_t* server, std::int32_t client_id);
+        client(uv_stream_t* server_handle, server* server, std::int32_t client_id);
         virtual ~client();
 
         [[nodiscard]] bool is_closed() const;
@@ -24,5 +26,6 @@ namespace blyss::server
         void close();
         [[nodiscard]] std::int32_t client_id() const;
         void read(std::uint8_t* data, ssize_t nread);
+        void frame();
     };
 }

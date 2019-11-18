@@ -52,6 +52,11 @@ namespace blyss::server
     void server::frame()
     {
         perf_watcher_.update();
+
+        for(auto& c : clients_)
+        {
+            c->frame();
+        }
     }
 
     void server::add_client(std::unique_ptr<client> c)
@@ -91,7 +96,7 @@ namespace blyss::server
 
         try
         {
-            s->add_client(std::make_unique<client>(server_handle, id));
+            s->add_client(std::make_unique<client>(server_handle, s, id));
         }
         catch (const uv_exception & e)
         {

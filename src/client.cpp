@@ -9,12 +9,13 @@ namespace blyss::server
     void read_callback(uv_stream_t* client_handle, ssize_t nread, const uv_buf_t* buf);
     void close_cb(uv_handle_t* client);
 
-    client::client(uv_stream_t* server, std::int32_t client_id)
+    client::client(uv_stream_t* server_handle, server* server, std::int32_t client_id)
         : client_id_{client_id}
+        , server_{server}
     {
-        uv_checked(uv_tcp_init(server->loop, &handle_));
+        uv_checked(uv_tcp_init(server_handle->loop, &handle_));
         handle_.data = this;
-        uv_checked(uv_accept(server, reinterpret_cast<uv_stream_t*>(&handle_)));
+        uv_checked(uv_accept(server_handle, reinterpret_cast<uv_stream_t*>(&handle_)));
         uv_checked(uv_read_start(reinterpret_cast<uv_stream_t*>(&handle_), alloc_callback, read_callback));
         spdlog::info("New connection ready!");
     }
@@ -53,6 +54,14 @@ namespace blyss::server
         reader_.read(data, nread);
     }
 
+    void client::frame()
+    {
+        std::optional<std::unique_ptr<packet_buffer>> p;
+        while (p = reader_.pop(), p.has_value())
+        {
+            
+        }
+    }
 
     void alloc_callback(uv_handle_t* client, size_t suggested_size, uv_buf_t* buf)
     {
