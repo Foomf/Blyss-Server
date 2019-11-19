@@ -16,7 +16,7 @@ namespace blyss::server
     {
         static const std::uint16_t max_packet_length = 5000;
 
-        std::array<std::uint8_t, max_packet_length> buffer_{};
+        std::array<std::uint8_t, max_packet_length + 2> buffer_{};
         std::uint16_t buffer_pos_ = 0;
         std::queue<std::unique_ptr<packet_buffer>> packets_{};
 
