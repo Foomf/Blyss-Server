@@ -82,12 +82,9 @@ namespace blyss::server
                 spdlog::info("Done reading from client_handle!");
                 c->close();
             }
-            else if (nread < 0)
-            {
-                uv_checked(nread);
-            }
             else
             {
+                uv_checked(nread);
                 spdlog::info("{0} bytes read.", nread);
                 c->read(reinterpret_cast<std::uint8_t*>(buf->base), nread);
             }
