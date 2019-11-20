@@ -18,14 +18,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # --------------------------------------------------------- #
 include(cmake/embed.cmake)
 include(cmake/add.cmake)
-include(cmake/lib/libprotobuf.cmake)
 
 # --------------------------------------------------------- #
 # Include dependencies                                      #
 # --------------------------------------------------------- #
 include(cmake/lib/spdlog.cmake)
 include(cmake/lib/libuv.cmake)
-#include(cmake/lib/libprotobuf.cmake)
+include(cmake/lib/libprotobuf.cmake)
+include(cmake/lib/boost.cmake)
 
 # --------------------------------------------------------- #
 # Include sources                                           #
@@ -50,6 +50,7 @@ add_library(${LIB_NAME} ${BLYSS_SRCS} ${BLYSS_HDRS} protocol.pb.cc protocol.pb.h
 target_include_directories(${LIB_NAME} PUBLIC
     ${BLYSS_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
 
 # --------------------------------------------------------- #

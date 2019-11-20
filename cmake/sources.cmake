@@ -15,6 +15,9 @@ ADD_CLASS_ROOT(packet_switch)
 ADD_HDR_ROOT(packet_type)
 ADD_HDR_ROOT(instance_map)
 
+ADD_CLASS(world world)
+ADD_CLASS(cell world)
+
 # --------------------------------------------------------- #
 # Text files                                                #
 # --------------------------------------------------------- #
