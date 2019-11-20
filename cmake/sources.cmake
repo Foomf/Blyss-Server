@@ -13,6 +13,7 @@ ADD_CLASS_ROOT(packet_reader)
 ADD_CLASS_ROOT(packet_buffer)
 ADD_CLASS_ROOT(packet_switch)
 ADD_HDR_ROOT(packet_type)
+ADD_HDR_ROOT(instance_map)
 
 # --------------------------------------------------------- #
 # Text files                                                #

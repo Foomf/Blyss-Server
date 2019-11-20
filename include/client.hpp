@@ -5,6 +5,7 @@
 #include <uv.h>
 
 #include "packet_reader.hpp"
+#include "instance_map.hpp"
 
 namespace blyss::server
 {
@@ -17,6 +18,7 @@ namespace blyss::server
         uv_tcp_t handle_{};
         bool closed_ = false;
         packet_reader reader_{};
+        instance_map<char*> buffers_{};
     public:
         client(uv_stream_t* server_handle, server* server, std::int32_t client_id);
         virtual ~client();
