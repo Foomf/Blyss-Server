@@ -4,9 +4,10 @@
 #include <cstdint>
 #include <memory>
 
+#include "cell.hpp"
+
 namespace blyss::server::world
 {
-    class cell;
     class world
     {
         std::int32_t max_x_;

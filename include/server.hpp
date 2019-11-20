@@ -10,6 +10,7 @@
 #include "perf_watcher.hpp"
 #include "client.hpp"
 #include "packet_switch.hpp"
+#include "world/world_manager.hpp"
 
 namespace blyss::server
 {
@@ -29,6 +30,8 @@ namespace blyss::server
         std::vector<std::unique_ptr<client>> clients_;
 
         packet_switch switch_;
+
+        world::world_manager worlds_{};
 
     public:
         explicit server(uv_loop_t* loop);
