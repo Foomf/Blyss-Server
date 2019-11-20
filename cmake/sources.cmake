@@ -17,6 +17,7 @@ ADD_HDR_ROOT(instance_map)
 
 ADD_CLASS(world world)
 ADD_CLASS(cell world)
+ADD_CLASS(cell_ref world)
 
 # --------------------------------------------------------- #
 # Text files                                                #
