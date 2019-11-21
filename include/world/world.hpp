@@ -8,7 +8,7 @@
 
 namespace blyss::server::world
 {
-    class world_manager
+    class world
     {
         std::map<boost::uuids::uuid, map> worlds_{};
 
