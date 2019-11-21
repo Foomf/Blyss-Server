@@ -8,7 +8,7 @@
 
 namespace blyss::server::world
 {
-    class world
+    class map
     {
         std::int32_t max_x_;
         std::int32_t max_y_;
@@ -16,7 +16,7 @@ namespace blyss::server::world
         std::unique_ptr<std::vector<cell>> cells_;
 
     public:
-        world(std::int32_t max_x, std::int32_t max_y, std::unique_ptr<std::vector<cell>> cells);
+        map(std::int32_t max_x, std::int32_t max_y, std::unique_ptr<std::vector<cell>> cells);
 
         [[nodiscard]] cell& cell_at(std::int32_t x, std::int32_t y) const;
     };

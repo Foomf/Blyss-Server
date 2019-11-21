@@ -4,13 +4,13 @@
 
 #include <boost/uuid/uuid.hpp>
 
-#include "world.hpp"
+#include "map.hpp"
 
 namespace blyss::server::world
 {
     class world_manager
     {
-        std::map<boost::uuids::uuid, world> worlds_{};
+        std::map<boost::uuids::uuid, map> worlds_{};
 
     };
 }
