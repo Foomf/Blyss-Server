@@ -13,7 +13,7 @@ namespace blyss::server::world
     {
         cell_ref spawn_location_{};
 
-        std::map<boost::uuids::uuid, map> worlds_{};
+        std::map<boost::uuids::uuid, map> maps_{};
 
     };
 }
