@@ -25,13 +25,14 @@ namespace blyss::server
 
         std::int64_t counter_ = 0;
 
+        std::unique_ptr<world::world> world_{};
+
         perf_watcher perf_watcher_;
 
         std::vector<std::unique_ptr<client>> clients_;
 
         packet_switch switch_;
 
-        world::world world_{};
 
     public:
         explicit server(uv_loop_t* loop);
@@ -48,5 +49,8 @@ namespace blyss::server
 
         std::int32_t gen_client_id();
         void read_packet(std::int32_t client_id, std::unique_ptr<packet_buffer> buff);
+
+    private:
+        static std::unique_ptr<world::world> make_null_world();
     };
 }

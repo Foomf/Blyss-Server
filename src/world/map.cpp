@@ -4,10 +4,11 @@
 
 namespace blyss::server::world
 {
-    map::map(const std::int32_t max_x, const std::int32_t max_y, std::unique_ptr<std::vector<cell>> cells)
+    map::map(boost::uuids::uuid map_id, const std::int32_t max_x, const std::int32_t max_y, std::unique_ptr<std::vector<cell>> cells)
         : max_x_{max_x}
         , max_y_{max_y}
         , cells_{std::move(cells)}
+        , map_id_{map_id}
     {
         
     }

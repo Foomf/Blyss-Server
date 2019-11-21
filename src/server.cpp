@@ -7,6 +7,10 @@
 
 #include "packet_buffer.hpp"
 
+#include "world/cell.hpp"
+
+#include <boost/uuid/uuid.hpp>
+
 namespace blyss::server
 {
     const std::uint64_t ms_per_frame = 50;
@@ -30,6 +34,8 @@ namespace blyss::server
         uv_checked(uv_listen(reinterpret_cast<uv_stream_t*>(&server_), 20, on_new_connection));
 
         uv_checked(uv_timer_init(loop_, &frame_timer_));
+
+        world_ = make_null_world();
     }
 
     server::~server()
@@ -84,6 +90,19 @@ namespace blyss::server
         switch_.read_packet(client_id, std::move(buff));
     }
 
+    std::unique_ptr<world::world> server::make_null_world()
+    {
+        const auto dim = 8;
+        auto world = std::make_unique<world::world>();
+        const boost::uuids::uuid map_id{};
+        auto cells = std::make_unique<std::vector<world::cell>>();
+        for (auto ii = 0; ii < dim * dim; ++ii)
+        {
+            cells->push_back(world::cell());
+        }
+        world->add_map(map_id, dim, dim, std::move(cells));
+        return world;
+    }
 
     void timer_callback(uv_timer_t* handle)
     {

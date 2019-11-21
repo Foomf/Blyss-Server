@@ -6,6 +6,8 @@
 
 #include "cell.hpp"
 
+#include  <boost/uuid/uuid.hpp>
+
 namespace blyss::server::world
 {
     class map
@@ -15,8 +17,10 @@ namespace blyss::server::world
 
         std::unique_ptr<std::vector<cell>> cells_;
 
+        boost::uuids::uuid map_id_;
+
     public:
-        map(std::int32_t max_x, std::int32_t max_y, std::unique_ptr<std::vector<cell>> cells);
+        map(boost::uuids::uuid map_id, std::int32_t max_x, std::int32_t max_y, std::unique_ptr<std::vector<cell>> cells);
 
         [[nodiscard]] cell& cell_at(std::int32_t x, std::int32_t y) const;
     };
