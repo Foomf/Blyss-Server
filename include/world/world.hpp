@@ -14,7 +14,7 @@ namespace blyss::server::world
     {
         cell_ref spawn_location_{};
 
-        std::map<boost::uuids::uuid, map> maps_{};
+        std::map<boost::uuids::uuid, std::unique_ptr<map>> maps_{};
 
     public:
         const map& add_map(boost::uuids::uuid map_id, std::int32_t max_x, std::int32_t max_y, std::unique_ptr<std::vector<cell>> cells);
